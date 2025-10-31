@@ -1,65 +1,88 @@
-from src.account import Account
+from src.PersonalAccount import PersonalAccount
+from src.BusinessAccount import BusinessAccount
 
-
-class TestAccount:
-    def test_account_creation(self):
-        account = Account("John", "Doe", "12345678901")
-        assert account.first_name == "John"
-        assert account.last_name == "Doe"
-        assert account.balance == 0
-        assert account.pesel == "12345678901"
+class TestPersonalAccount:
+    def test_personal_account_creation(self):
+        acc = PersonalAccount("John", "Doe", "12345678901")
+        assert acc.first_name == "John"
+        assert acc.last_name == "Doe"
+        assert acc.balance == 0
+        assert acc.pesel == "12345678901"
+        assert acc.history == []
 
 
     def test_pesel_too_long(self):
-        acc = Account("Pawel", "Sobolewski", "12345678901234")
+        acc = PersonalAccount("Pawel", "Sobolewski", "12345678901234")
         assert acc.pesel == "Invalid"
 
     def test_pesel_too_short(self):
-        acc = Account("Maksymilian", "Bielawski", "123456")
+        acc = PersonalAccount("Maksymilian", "Bielawski", "123456")
         assert acc.pesel == "Invalid"
 
     def test_pesel_is_none(self):
-        acc = Account("Malwina", "Matysek", None)
+        acc = PersonalAccount("Malwina", "Matysek", None)
         assert acc.pesel == "Invalid"
 
 
     def test_promo_is_valid(self):
-        acc = Account("Katja", "Skowronska", "06212345678", "PROM_XYZ")
+        acc = PersonalAccount("Katja", "Skowronska", "06212345678", "PROM_XYZ")
         assert acc.balance == 50
 
     def test_promo_too_long(self):
-        acc = Account("Stanislaw", "Kossakowski", "06212345678", "PROM_XYZZ")
+        acc = PersonalAccount("Stanislaw", "Kossakowski", "06212345678", "PROM_XYZZ")
         assert acc.balance == 0
 
     def test_promo_too_short(self):
-        acc = Account("Wiktor", "Sarosiek", "06212345678", "PROM_XY")
+        acc = PersonalAccount("Wiktor", "Sarosiek", "06212345678", "PROM_XY")
         assert acc.balance == 0
 
     def test_promo_not_valid(self):
-        acc = Account("Laura", "Sakowicz", "06212345678", "PROZ_XYZ")
+        acc = PersonalAccount("Laura", "Sakowicz", "06212345678", "PROZ_XYZ")
         assert acc.balance == 0
 
     def test_promo_too_old(self):
-        acc = Account("Hubet", "Wienicki", "59012345678", "PROM_XYZ")
+        acc = PersonalAccount("Hubet", "Wienicki", "59012345678", "PROM_XYZ")
         assert acc.balance == 0
 
     def test_promo_1960(self):
-        acc = Account("Malwina", "Matysek", "60012345678", "PROM_XYZ")
+        acc = PersonalAccount("Renata", "Dobrowolska", "60012345678", "PROM_XYZ")
         assert acc.balance == 50
 
 
     def test_validate_promo_correct(self):
-        acc = Account("Malwina", "Matysek", "06212345678", "PROM_XYZ")
-        assert acc.validateBirthYear() is True
+        acc = PersonalAccount("Hubert", "Baranowski", "06212345678", "PROM_XYZ")
+        assert acc.validatePromotionBirthYear() is True
 
     def test_validate_promo_correct_after_september(self):
-        acc = Account("Malwina", "Matysek", "06312345678", "PROM_XYZ")
-        assert acc.validateBirthYear() is True
+        acc = PersonalAccount("Mateusz", "Bartnik", "06312345678", "PROM_XYZ")
+        assert acc.validatePromotionBirthYear() is True
 
     def test_validate_promo_too_old(self):
-        acc = Account("Malwina", "Matysek", "59012345678", "PROM_XYZ")
-        assert acc.validateBirthYear() is False
+        acc = PersonalAccount("Mateusz", "Orodzinski", "59012345678", "PROM_XYZ")
+        assert acc.validatePromotionBirthYear() is False
 
     def test_validate_promo_too_old_after_september(self):
-        acc = Account("Malwina", "Matysek", "59112345678", "PROM_XYZ")
-        assert acc.validateBirthYear() is False
+        acc = PersonalAccount("Ewelina", "Maer", "59112345678", "PROM_XYZ")
+        assert acc.validatePromotionBirthYear() is False
+
+
+class TestBusinessAccount:
+    def test_business_account_creation(self):
+        acc = BusinessAccount("Drutex sp. z o.o.", "1234567890")
+        assert acc.company_name == "Drutex sp. z o.o."
+        assert acc.nip == "1234567890"
+        assert acc.balance == 0
+        assert acc.history == []
+
+
+    def test_nip_too_long(self):
+        acc = BusinessAccount("Drutex sp. z o.o.", "12345678901234")
+        assert acc.nip == "Invalid"
+
+    def test_nip_too_short(self):
+        acc = BusinessAccount("Drutex sp. z o.o.", "123456")
+        assert acc.nip == "Invalid"
+
+    def test_nip_is_none(self):
+        acc = BusinessAccount("Drutex sp. z o.o.", None)
+        assert acc.nip == "Invalid"
