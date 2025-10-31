@@ -1,4 +1,4 @@
-from src.Account import Account
+from modules.Account import Account
 
 class BusinessAccount(Account):
     def __init__(self, company_name, nip):

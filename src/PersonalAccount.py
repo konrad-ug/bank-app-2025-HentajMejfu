@@ -1,4 +1,4 @@
-from src.Account import Account
+from modules.Account import Account
 
 class PersonalAccount(Account):
     def __init__(self, first_name, last_name, pesel, promo_code=None):
