@@ -18,13 +18,10 @@ class PersonalAccount(Account):
         self.history = []
 
     def validatePromotionBirthYear(self):
-        if self.pesel is not None:
-            pesel = self.pesel
-            if pesel[2] in ["0", "1"] and int(pesel[:2]) >= 60:
-                return True
-            elif pesel[2] in ["2", "3"]:
-                return True
-            else:
-                return False
+        pesel = self.pesel
+        if pesel[2] in ["0", "1"] and int(pesel[:2]) >= 60:
+            return True
+        elif pesel[2] in ["2", "3"]:
+            return True
         else:
             return False
