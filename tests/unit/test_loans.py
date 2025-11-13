@@ -1,34 +1,30 @@
 from src.PersonalAccount import PersonalAccount
+import pytest
 
 
 class TestLoans:
-    def test_loan_approved_last_three(self):
-        acc: PersonalAccount = PersonalAccount('Maliwna', 'Matysek', '12345678901')
-        acc.receiveTransfer(69)
-        acc.receiveTransfer(420)
-        acc.receiveTransfer(2137)
-        assert acc.submit_for_loan(420) is True
-        assert acc.balance == 3046
 
-    def test_loan_approved_last_five(self):
-        acc: PersonalAccount = PersonalAccount('Maliwna', 'Matysek', '12345678901')
-        acc.receiveTransfer(2137)
-        acc.expressTransfer(420)
-        acc.receiveTransfer(69)
-        acc.normalTransfer(20)
-        assert acc.submit_for_loan(420) is True
-        assert acc.balance == 2185
+    @pytest.fixture()
+    def p_acc(self):
+        account = PersonalAccount('Maliwna', 'Matysek', '12345678901')
+        return account
 
-    def test_loan_rejected_too_few_transactions(self):
-        acc: PersonalAccount = PersonalAccount('Maliwna', 'Matysek', '12345678901')
-        acc.receiveTransfer(20)
-        assert acc.submit_for_loan(420) is False
-        assert acc.balance == 20
-
-    def test_loan_rejected_last_five(self):
-        acc: PersonalAccount = PersonalAccount('Maliwna', 'Matysek', '12345678901')
-        acc.receiveTransfer(420)
-        acc.expressTransfer(20)
-        acc.expressTransfer(20)
-        assert acc.submit_for_loan(2137) is False
-        assert acc.balance == 378
+    @pytest.mark.parametrize("history, balance, amount, expected_result, expected_balance", [
+        ([69, 420, 2137], 2626, 420, True, 3046),
+        ([2137, -420, -1, 69, -20], 1765, 420, True, 2185),
+        ([420, -50, -50], 320, 420, False, 320),
+        ([20], 20, 420, False, 20),
+        ([420, -20, -1, -20, -1], 378, 2137, False, 378)
+    ],
+    ids = [
+        "three positives",
+        "five transactions",
+        "three transactions with two negatives",
+        "not enough transactions",
+        "multiple transactions with sum too low"
+    ])
+    def test_loan(self, p_acc: PersonalAccount, history: list[float], balance: float, amount: int, expected_result: bool, expected_balance: float):
+        p_acc.history = history
+        p_acc.balance = balance
+        assert p_acc.submit_for_loan(amount) is expected_result
+        assert p_acc.balance == expected_balance
