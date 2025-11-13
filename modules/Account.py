@@ -1,5 +1,5 @@
 class Account:
-    def normalTransfer(self, amount):
+    def normalTransfer(self, amount: float):
         if self.balance >= amount:
             self.balance -= amount
             self.bookTransaction(-amount)
@@ -7,7 +7,7 @@ class Account:
         else:
             return False
 
-    def expressTransfer(self, amount):
+    def expressTransfer(self, amount: float):
         if self.balance >= amount:
             self.balance -= (amount + self.getExpressFee())
             self.bookTransaction(-amount, -self.getExpressFee())
@@ -15,7 +15,7 @@ class Account:
         else:
             return False
 
-    def receiveTransfer(self, amount):
+    def receiveTransfer(self, amount: float):
         self.balance += amount
         self.bookTransaction(amount)
         return True
@@ -23,6 +23,6 @@ class Account:
     def getExpressFee(self):
         return 1
 
-    def bookTransaction(self, amount, fee = None):
+    def bookTransaction(self, amount: float, fee: int = None):
         self.history.append(amount)
         self.history.append(fee) if fee is not None else None
