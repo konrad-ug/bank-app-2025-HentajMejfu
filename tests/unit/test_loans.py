@@ -7,7 +7,7 @@ class TestLoans:
         acc.receiveTransfer(420)
         acc.receiveTransfer(2137)
         assert acc.submit_for_loan(420) is True
-        #assert acc.balance == 3046
+        assert acc.balance == 3046
 
     def test_loan_approved_last_five(self):
         acc = PersonalAccount('Maliwna', 'Matysek', '12345678901')
