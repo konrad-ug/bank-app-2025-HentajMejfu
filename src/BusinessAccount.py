@@ -9,3 +9,10 @@ class BusinessAccount(Account):
 
     def getExpressFee(self):
         return 5
+
+    def submitForLoan(self, amount: int):
+        if self.balance >= amount * 2 and -1775 in self.history:
+            self.balance += amount
+            return True
+        else:
+            return False
