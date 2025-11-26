@@ -26,7 +26,7 @@ class PersonalAccount(Account):
         else:
             return False
 
-    def submit_for_loan(self, amount: int):
+    def submitForLoan(self, amount: int):
         if len(self.history) >= 3 and False not in [i > 0 for i in self.history[:3]]:
             self.balance += amount
             return True
