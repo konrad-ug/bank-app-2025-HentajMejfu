@@ -19,3 +19,10 @@ class AccountRegistry:
 
     def getNumberOfAccounts(self):
         return len(self.accounts)
+
+    def removeAccount(self, pesel: str):
+        account = self.search(pesel)
+        if account:
+            self.accounts.remove(account)
+            return True
+        return False
