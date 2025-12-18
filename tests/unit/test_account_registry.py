@@ -49,3 +49,13 @@ class TestAccountRegistry:
         registry.accounts = pAccounts.copy()
 
         assert registry.getNumberOfAccounts() == 3
+
+    def test_remove_account(self, registry: ar, pAccounts: list[pa]):
+        registry.accounts = pAccounts.copy()
+
+        assert registry.removeAccount('02222954321') is True
+        assert len(registry.accounts) == 2
+        assert registry.search('02222954321') is None
+
+        assert registry.removeAccount('99999999999') is False
+        assert len(registry.accounts) == 2
