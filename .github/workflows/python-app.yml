@@ -1,0 +1,50 @@
+name: unit test
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Ensure python-dotenv is always available for imports
+          pip install python-dotenv
+          # Install project deps if present
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          # Test tools (install or rely on requirements)
+          pip install pytest pytest-mock coverage flake8 || true
+
+      - name: Lint (fail on syntax/serious errors)
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          # non-blocking additional checks
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Run tests
+        env:
+          # Optional: set this in repo Secrets if your code expects it
+          BANK_APP_MF_URL: ${{ secrets.BANK_APP_MF_URL }}
+        run: |
+          pytest -q
