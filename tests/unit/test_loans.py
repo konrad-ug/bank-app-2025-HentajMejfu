@@ -1,3 +1,4 @@
+from pytest_mock import MockerFixture
 from src.PersonalAccount import PersonalAccount
 from src.BusinessAccount import BusinessAccount
 import pytest
@@ -32,7 +33,12 @@ class TestLoans:
 
 
     @pytest.fixture()
-    def b_acc(self):
+    def b_acc(self, mocker: MockerFixture):
+        mock = mocker.patch("requests.get")
+        mock.return_value.status_code = 200
+        mock.return_value.json.return_value = {
+            "result": {"subject": {"statusValue": "Czynny"}}
+        }
         account = BusinessAccount('Drutex s.p. z o.o.', '1234567890')
         return account
 
