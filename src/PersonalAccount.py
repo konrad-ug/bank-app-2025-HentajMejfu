@@ -7,14 +7,14 @@ class PersonalAccount(Account):
         self.last_name: str = last_name
         self.pesel: str = pesel if (pesel is not None and len(pesel) == 11) else "Invalid"
         self.balance: float = (
-            50
+            50.0
             if (
                 promo_code is not None
                 and len(promo_code) == 8
                 and promo_code[:5] == "PROM_"
                 and self.validatePromotionBirthYear()
             )
-            else 0
+            else 0.0
         )
         self.history: list[float] = []
 
