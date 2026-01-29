@@ -41,4 +41,17 @@ jobs:
       run: python3 -m coverage report
     - name: Check coverage threshold
       run: python3 -m coverage report --fail-under=100
+    - name: Start Flask server
+      run: |
+        export FLASK_APP=src/app/api.py
+        export FLASK_ENV=development
+        export PYTHONPATH=$GITHUB_WORKSPACE
+        nohup flask run --host=127.0.0.1 --port=5000 > flask.log 2>&1 &
+        echo "Waiting 5 seconds for Flask to start..."
+        sleep 5
+
+    - name: Execute API tests
+      run: |
+        python3 -m pytest tests/api
+
 
