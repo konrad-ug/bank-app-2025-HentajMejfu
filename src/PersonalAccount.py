@@ -36,3 +36,19 @@ class PersonalAccount(Account):
             return True
         else:
             return False
+
+    def toDict(self):
+        return {
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "pesel": self.pesel,
+            "balance": self.balance,
+            "history": self.history,
+        }
+
+    @classmethod
+    def fromDict(cls, data):
+        account = cls(data.get("first_name"), data.get("last_name"), data.get("pesel"))
+        account.balance = data.get("balance", account.balance)
+        account.history = data.get("history", [])
+        return account

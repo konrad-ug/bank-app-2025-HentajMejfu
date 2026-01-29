@@ -1,0 +1,4 @@
+[run]
+omit =
+    src/accounts_repository_interface.py
+    src/mongo_accounts_repository.py
