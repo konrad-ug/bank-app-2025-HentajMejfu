@@ -1,1 +1,7 @@
 pytest==8.4.2
+coverage==6.5.0
+pytest-mock==3.10.0
+dotenv
+requests
+flask
+pymongo
