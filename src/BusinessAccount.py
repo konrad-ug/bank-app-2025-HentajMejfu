@@ -21,7 +21,7 @@ class BusinessAccount(Account):
         else:
             self.nip: str = "Invalid"
 
-        self.balance: float = 0
+        self.balance: float = 0.0
         self.history: list[float] = []
 
     def getExpressFee(self):
