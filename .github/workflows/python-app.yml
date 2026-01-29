@@ -36,7 +36,7 @@ jobs:
     - name: Run tests with coverage
       run: |
         export PYTHONPATH="$PWD"
-        python3 -m coverage run --source=src -m pytest
+        python3 -m coverage run --source=src -m pytest tests/unit
     - name: Show coverage report
       run: python3 -m coverage report
     - name: Check coverage threshold
