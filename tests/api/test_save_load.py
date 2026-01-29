@@ -23,20 +23,17 @@ class TestSaveLoadApi:
             requests.delete(f"{self.url}/api/accounts/{pesel}")
 
     def test_save_and_load_accounts(self):
-        # save to mongoDB
         response = requests.post(f"{self.url}/api/accounts/save")
         assert response.status_code == 200
         data = response.json()
         assert data["message"] == "Accounts saved to MongoDB"
 
-        # Delete from repo
         response = requests.get(f"{self.url}/api/accounts")
         accounts = response.json()
         for account in accounts:
             pesel = account["pesel"]
             requests.delete(f"{self.url}/api/accounts/{pesel}")
 
-        # load from mangoDB
         response = requests.post(f"{self.url}/api/accounts/load")
         assert response.status_code == 200
         data = response.json()

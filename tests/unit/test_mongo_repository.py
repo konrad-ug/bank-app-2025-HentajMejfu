@@ -5,8 +5,8 @@ from pytest_mock import MockFixture
 
 
 class TestMongoAccountRegistry:
-    account1: PersonalAccount = PersonalAccount("Dariusz", "Dudek", "12345678901")
-    account2: PersonalAccount = PersonalAccount("Maks", "Bielawski", "10987654321")
+    account1 = PersonalAccount("Alice", "Smith", "12345678901")
+    account2 = PersonalAccount("Bob", "Johnson", "10987654321")
 
     @pytest.fixture(autouse=True)
     def mongo_repo(self):
@@ -25,10 +25,10 @@ class TestMongoAccountRegistry:
 
         assert len(loaded_accounts) == 2
         assert any(
-            acc.pesel == "12345678901" and acc.first_name == "Dariusz"
+            acc.pesel == "12345678901" and acc.first_name == "Alice"
             for acc in loaded_accounts
         )
         assert any(
-            acc.pesel == "10987654321" and acc.first_name == "Maks"
+            acc.pesel == "10987654321" and acc.first_name == "Bob"
             for acc in loaded_accounts
         )
