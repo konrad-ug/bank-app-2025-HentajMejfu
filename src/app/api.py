@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from src.AccountRegistry import AccountRegistry as ar
 from src.PersonalAccount import PersonalAccount as pa
+from src.MongoAccountsRepository import MongoAccountRepository
 
 app = Flask(__name__)
 registry = ar()
@@ -114,3 +115,19 @@ def handleTransfer(pesel):
 
     else:
         return jsonify({"error": "Insufficient funds"}), 422
+
+@app.route("/api/accounts/save", methods=["POST"])
+def saveAccounts():
+    repo = MongoAccountRepository()
+    repo.save_all(registry.getAllAccounts())
+    return jsonify({"message": "Accounts saved to MongoDB"}), 200
+
+
+@app.route("/api/accounts/load", methods=["POST"])
+def loadAccounts():
+    repo = MongoAccountRepository()
+    accounts = repo.load_all()
+    registry.accounts = []
+    for account in accounts:
+        registry.addAccount(account)
+    return jsonify({"message": "Accounts loaded from MongoDB"}), 200
