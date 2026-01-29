@@ -2,13 +2,14 @@ import os
 from dotenv import load_dotenv
 from datetime import datetime
 import requests
-from modules.Account import Account
+from src.modules.Account import Account
 
 load_dotenv()
 BANK_APP_MF_URL: str = os.getenv("BANK_APP_MF_URL")
 
 class BusinessAccount(Account):
     def __init__(self, company_name: str, nip: str):
+        self.account_type: str = 'business'
         self.company_name: str = company_name
 
         if nip is not None and len(nip) == 10:

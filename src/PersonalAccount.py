@@ -1,7 +1,8 @@
-from modules.Account import Account
+from src.modules.Account import Account
 
 class PersonalAccount(Account):
     def __init__(self, first_name: str, last_name: str, pesel: str, promo_code: str = None):
+        self.account_type: str = 'personal'
         self.first_name: str = first_name
         self.last_name: str = last_name
         self.pesel: str = pesel if (pesel is not None and len(pesel) == 11) else "Invalid"
